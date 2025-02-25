@@ -6,19 +6,13 @@ import dotenv from "dotenv";
 dotenv.config();
 
 const sequelize = new Sequelize(
-  // Databasens navn
-  process.env.DBNAME,
-  // Brugernavn til databasen
-  process.env.DBUSER,
-  // Adgangskode til databasen
-  process.env.DBPASSWD,
+  process.env.DBNAME, // Databasens navn
+  process.env.DBUSER, // Brugernavn til databasen
+  process.env.DBPASSWD, // Adgangskode til databasen
   {
-    // Database-serverens adresse
-    host: process.env.DBHOST,
-    // Porten databasen kører på
-    port: process.env.DBPORT,
-    // Databasetype (MySQL)
-    dialect: "mysql",
+    host: process.env.DBHOST, // Database-serverens adresse
+    port: process.env.DBPORT, // Porten databasen kører på
+    dialect: "mysql", // Databasetype (MySQL)
   }
 );
 

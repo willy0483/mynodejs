@@ -45,8 +45,6 @@ carModel.init(
   {
     sequelize,
     modelName: "car",
-    underscored: true,
-    freezeTableName: true,
     createdAt: true,
     updatedAt: true,
   }
