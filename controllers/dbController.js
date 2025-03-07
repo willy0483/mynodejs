@@ -6,7 +6,7 @@ export const dbController = express.Router();
 
 dbController.get("/test", async (req, res) => {
   try {
-    await sequelize.sync({ force: true });
+    await dbConfig.authenticate();
     res.send("Connection success");
   } catch (error) {
     res.send(error);

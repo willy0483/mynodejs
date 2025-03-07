@@ -6,37 +6,86 @@ import { categoryModel } from "../models/categoryModel.js";
 export const categoryController = express.Router();
 
 // READ: Route til at hente liste
-categoryController.get("/category", async (req, res) => {
+categoryController.get("/categories", async (req, res) => {
   try {
-    const result = await categoryModel.findAll();
-    res.send(result);
+    const data = await categoryModel.findAll({
+      attributes: ["id", "name"],
+    });
+
+    if (!data || data.length === 0) {
+      res.json({ message: "Error: No categories" });
+    }
+    res.json(data);
   } catch (error) {
     res.send("Error: Failed to get all " + error);
   }
 });
 
 // READ: Route til at hente detaljer
-categoryController.get("/category/:id([0-9]*)", async (req, res) => {
-  // categoryModel.findOne();
-  res.send("category 1");
+categoryController.get("/categories/:id([0-9]*)", async (req, res) => {
+  try {
+    const { id } = req.params;
+
+    let result = await categoryModel.findOne({
+      where: { id: id },
+    });
+
+    if (!result) {
+      return res.status(404).json({ message: "Error: category not found" });
+    }
+
+    res.json(result);
+  } catch (error) {
+    res.json("Error: Failed to get category " + error);
+  }
 });
 
 // CREATE: Route til at oprette
-categoryController.post("/category", async (req, res) => {
+categoryController.post("/categories", async (req, res) => {
   try {
     const result = await categoryModel.create(req.body);
-    res.status(201).send("Category created");
+    res.status(201).json({ message: "Category was created", content: result });
   } catch (error) {
-    res.status(400).send("Error: Failed create " + error);
+    const errorMessage = "Could not create category";
+    console.error("Error when creating category:", error);
+    res.status(500).json({ message: errorMessage, content: error.message });
   }
 });
 
 // UPDATE: Route til at opdatere
-categoryController.put("/category/:id([0-9]*)", async (req, res) => {
-  // categoryModel.update();
+categoryController.put("/categories/:id([0-9]*)", async (req, res) => {
+  try {
+    const { id } = req.params;
+
+    const result = await categoryModel.update(req.body, {
+      where: { id },
+    });
+
+    res.json({
+      message: `Category ID#${id} was updated`,
+    });
+  } catch (error) {
+    const errorMessage = "Could not update category";
+    console.error(errorMessage, error);
+    res.status(500).json({ message: errorMessage, content: error.message });
+  }
 });
 
 // DELETE: Route til at slette
-categoryController.delete("/category/:id([0-9]*)", async (req, res) => {
-  // categoryModel.destroy();
+categoryController.delete("/categories/:id([0-9]*)", async (req, res) => {
+  try {
+    const { id } = req.params;
+
+    await categoryModel.destroy({
+      where: { id },
+    });
+
+    res.json({
+      message: `Category ID#${id} was deleted`,
+    });
+  } catch (error) {
+    const errorMessage = "Could not delete category";
+    console.error(errorMessage, error);
+    res.status(500).json({ message: errorMessage, content: error.message });
+  }
 });

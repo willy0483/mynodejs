@@ -1,5 +1,7 @@
 import sequelize from "../Config/sequelizeConfig.js";
 import { DataTypes, Model } from "sequelize";
+import { brandModel } from "./brandModel.js";
+import { categoryModel } from "./categoryModel.js";
 
 export class carModel extends Model {}
 
@@ -12,14 +14,22 @@ carModel.init(
       primaryKey: true,
     },
 
-    category: {
-      type: DataTypes.STRING,
+    brand_id: {
+      type: DataTypes.INTEGER,
       allowNull: false,
+      references: {
+        model: brandModel,
+        key: "id",
+      },
     },
 
-    brand: {
-      type: DataTypes.STRING,
+    category_id: {
+      type: DataTypes.INTEGER,
       allowNull: false,
+      references: {
+        model: categoryModel,
+        key: "id",
+      },
     },
 
     model: {
@@ -47,5 +57,5 @@ carModel.init(
     modelName: "car",
     createdAt: true,
     updatedAt: true,
-  }
+  },
 );
